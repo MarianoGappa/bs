@@ -16,6 +16,19 @@ drwxr-xr-x  11 marianol  staff   374B  8 May 20:59 .idea
 2.8M
 ```
 
+# bs is not du
+
+* Does not recurse subdirectories
+* Allows you to pipe-filter STDIN
+```
+~/Code/go/src/github.com/MarianoGappa/bs master* $ du -hs
+4.0M	.
+~/Code/go/src/github.com/MarianoGappa/bs master* $ ll -h | bs
+2.8M
+~/Code/go/src/github.com/MarianoGappa/bs master* $ ll -h | grep \.go | bs
+1.3K
+```
+
 # Installing
 ```
 go get github.com/MarianoGappa/bs
