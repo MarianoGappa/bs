@@ -28,6 +28,7 @@ drwxr-xr-x  11 marianol  staff   374B  8 May 20:59 .idea
 ~/Code/go/src/github.com/MarianoGappa/bs master* $ ll -h | grep \.go | bs
 1.3K
 ```
+* Note that most linux distros don't use the `B` suffix for sizes in bytes (i.e. less than 1K), so on Linux you might get slightly smaller numbers.
 
 # Installing
 ```
