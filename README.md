@@ -33,8 +33,4 @@ drwxr-xr-x  11 marianol  staff   374B  8 May 20:59 .idea
 # Installing
 ```
 go get github.com/MarianoGappa/bs
-cd /path/to/bs
-go build .
-go install
-ll -h | bs
 ```
