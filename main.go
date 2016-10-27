@@ -2,20 +2,30 @@ package main
 
 import (
 	"bufio"
-	"os"
+	"flag"
 	"fmt"
-	"strings"
+	"math"
+	"os"
 	"regexp"
 	"strconv"
-	"math"
+	"strings"
 )
 
 func main() {
+	insensitive := flag.Bool("i", false, "case insensitive matching")
+	flag.Parse()
+
+	iModif := ""
+	if *insensitive {
+		iModif = "(?i)"
+	}
+
 	scanner := bufio.NewScanner(os.Stdin)
 	total := float64(0)
 	for scanner.Scan() {
 		for _, v := range strings.Fields(scanner.Text()) {
-			if matched, err := regexp.MatchString("^[\\d\\.]+[B|K|M|G|T]$", v); err == nil && matched {
+			re := iModif + "^[\\d\\.]+[B|K|M|G|T]$"
+			if matched, err := regexp.MatchString(re, v); err == nil && matched {
 				i, err := strconv.ParseFloat(v[:len(v)-1], 64)
 				if err == nil {
 					total += i * multiplier(rune(v[len(v)-1]))
@@ -32,23 +42,28 @@ func main() {
 	case total < 1000:
 		fmt.Println(strconv.FormatInt(int64(round(total)), 10) + "B")
 	case total < 1000000:
-		fmt.Println(strconv.FormatFloat(total / 1000, 'f', 1, 64) + "K")
+		fmt.Println(strconv.FormatFloat(total/1000, 'f', 1, 64) + "K")
 	case total < 1000000000:
-		fmt.Println(strconv.FormatFloat(total / 1000000, 'f', 1, 64) + "M")
+		fmt.Println(strconv.FormatFloat(total/1000000, 'f', 1, 64) + "M")
 	case total < 1000000000000:
-		fmt.Println(strconv.FormatFloat(total / 1000000000, 'f', 1, 64) + "G")
+		fmt.Println(strconv.FormatFloat(total/1000000000, 'f', 1, 64) + "G")
 	default:
-		fmt.Println(strconv.FormatFloat(total / 1000000000000, 'f', 1, 64) + "T")
+		fmt.Println(strconv.FormatFloat(total/1000000000000, 'f', 1, 64) + "T")
 	}
 }
 
 func multiplier(l rune) float64 {
 	switch l {
-	case 'B': return float64(1)
-	case 'K': return float64(1000)
-	case 'M': return float64(1000000)
-	case 'G': return float64(1000000000)
-	case 'T': return float64(1000000000000)
+	case 'B', 'b':
+		return float64(1)
+	case 'K', 'k':
+		return float64(1000)
+	case 'M', 'm':
+		return float64(1000000)
+	case 'G', 'g':
+		return float64(1000000000)
+	case 'T', 't':
+		return float64(1000000000000)
 	}
 	return float64(1)
 }
