@@ -13,6 +13,7 @@ import (
 
 func main() {
 	insensitive := flag.Bool("i", false, "case insensitive matching")
+	unit := flag.String("u", "", "output unit ([B|K|M|G|T]; default adapts to value)")
 	flag.Parse()
 
 	iModif := ""
@@ -38,17 +39,33 @@ func main() {
 		fmt.Fprintln(os.Stderr, "reading standard input:", err)
 	}
 
+	suffix := ""
 	switch {
-	case total < 1000:
-		fmt.Println(strconv.FormatInt(int64(round(total)), 10) + "B")
-	case total < 1000000:
-		fmt.Println(strconv.FormatFloat(total/1000, 'f', 1, 64) + "K")
-	case total < 1000000000:
-		fmt.Println(strconv.FormatFloat(total/1000000, 'f', 1, 64) + "M")
-	case total < 1000000000000:
-		fmt.Println(strconv.FormatFloat(total/1000000000, 'f', 1, 64) + "G")
+	case (*unit == "" && total < 1000) || *unit == "B":
+		if *unit == "" {
+			suffix = "B"
+		}
+		fmt.Println(strconv.FormatInt(int64(round(total)), 10) + suffix)
+	case (*unit == "" && total < 1000000) || *unit == "K":
+		if *unit == "" {
+			suffix = "K"
+		}
+		fmt.Println(strconv.FormatFloat(total/1000, 'f', 1, 64) + suffix)
+	case (*unit == "" && total < 1000000000) || *unit == "M":
+		if *unit == "" {
+			suffix = "M"
+		}
+		fmt.Println(strconv.FormatFloat(total/1000000, 'f', 1, 64) + suffix)
+	case (*unit == "" && total < 1000000000000) || *unit == "G":
+		if *unit == "" {
+			suffix = "G"
+		}
+		fmt.Println(strconv.FormatFloat(total/1000000000, 'f', 1, 64) + suffix)
 	default:
-		fmt.Println(strconv.FormatFloat(total/1000000000000, 'f', 1, 64) + "T")
+		if *unit == "" {
+			suffix = "T"
+		}
+		fmt.Println(strconv.FormatFloat(total/1000000000000, 'f', 1, 64) + suffix)
 	}
 }
 
