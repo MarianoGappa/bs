@@ -16,6 +16,15 @@ drwxr-xr-x  11 marianol  staff   374B  8 May 20:59 .idea
 2.8M
 ```
 
+# Options
+
+- `-u [B|K|M|G]` Numeric output in B, KB, MB or GB. Useful for composing (e.g. with bc)
+
+```
+~/Code/go/src/github.com/MarianoGappa/bs $ ll -h | bs -u M
+2.8
+```
+
 # bs is not du
 
 * Does not recurse subdirectories
@@ -30,7 +39,15 @@ drwxr-xr-x  11 marianol  staff   374B  8 May 20:59 .idea
 ```
 * Note that most linux distros don't use the `B` suffix for sizes in bytes (i.e. less than 1K), so on Linux you might get slightly smaller numbers.
 
+# Bash foo for recursing subdirectories
+
+```
+ls -lhR | awk '{ if (NF==9) print }' | grep ... | bs
+```
+
 # Installing
 ```
 go get github.com/MarianoGappa/bs
 ```
+
+or get the latest binary for your OS: https://github.com/MarianoGappa/bs/releases
